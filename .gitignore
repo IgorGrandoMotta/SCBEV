@@ -1,0 +1,7 @@
+build/
+*.bin
+*.elf
+*.map
+teste_seguranca
+.DS_Store
+Thumbs.db
