@@ -19,12 +19,10 @@ firmware.
 
 ## Código e interface
 
-- `firmware/SCBEV_Simples/SCBEV_Simples.ino`: 273 linhas; aquisição, rede,
+- `firmware/SCBEV/SCBEV.ino`: aquisição, rede,
   interface, relé e persistência.
-- `firmware/SCBEV_Simples/Seguranca.h`: 94 linhas; condições de bloqueio,
+- `firmware/SCBEV/Seguranca.h`: condições de bloqueio,
   abertura e rearme.
-- `testes/`: verificações locais da lógica e do JavaScript do histórico.
-- [Testes e resultados](docs/TESTES.md): ensaios da versão final e limitações.
 
 O HTML, o CSS e o JavaScript estão no próprio `.ino`. A interface apresenta
 leitura, alarme, comando da válvula, IP, MAC, horário e acesso ao histórico.
@@ -63,7 +61,7 @@ sem estabelecer uma nova especificação da válvula original.
 
 ## Configuração e uso
 
-1. Abra `firmware/SCBEV_Simples/SCBEV_Simples.ino` no Arduino IDE, mantendo
+1. Abra `firmware/SCBEV/SCBEV.ino` no Arduino IDE, mantendo
    `Seguranca.h` na mesma pasta.
 2. Selecione ESP32 Dev Module e a porta da placa. A compilação de referência
    utilizou Arduino-ESP32 3.3.12 e partição padrão de 4 MB com filesystem.
@@ -123,8 +121,8 @@ A equipe compilou e executou a versão final em 09/11/2026. Foram verificados
 comandos manuais, bloqueio de água por detecção, retenção e rearme, registros
 após reinício, ping, TCP 80, HTTP 200, vinte consultas sequenciais e erro 404.
 A queda deliberada do Wi-Fi não foi testada nesta versão. O retorno da conexão
-após reiniciar não substitui esse teste. Os resultados estão em `docs/TESTES.md`;
-as capturas foram reunidas no relatório acadêmico entregue separadamente.
+após reiniciar não substitui esse teste. As capturas e os resultados foram
+reunidos no relatório acadêmico entregue separadamente.
 
 A tela mostra o comando elétrico, sem medir posição ou vazão. Algumas falhas de
 ligação podem produzir leitura semelhante a seco; o sistema não diagnostica

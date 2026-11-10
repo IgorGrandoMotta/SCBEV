@@ -1,8 +1,6 @@
 #pragma once
 #include <stdint.h>
 
-// Logica independente de Wi-Fi e de HTML, testavel no computador.
-// Todos os acessos no ESP32 ficam protegidos por uma secao critica curta.
 class Seguranca {
  public:
   enum Evento : uint32_t {
@@ -14,7 +12,7 @@ class Seguranca {
   bool molhado = false;
   bool secoConfirmado = false;
   bool alarme = false;
-  bool aberta = false;  // COMANDO eletrico, nao posicao fisica medida.
+  bool aberta = false;
   bool conectado = false;
   bool memoriaOk = false;
   bool temAmostra = false;
@@ -50,7 +48,6 @@ class Seguranca {
           if (molhado) { molhado = false; eventos |= SECO; }
         }
       } else {
-        // Faixa de histerese: nao prova que a placa esta seca.
         contandoSeco = false;
         secoConfirmado = false;
       }
@@ -82,7 +79,6 @@ class Seguranca {
     if (!secoConfirmado || molhado || !memoriaOk || !conectado ||
         !amostraRecente(agora, limiteIdade)) return false;
     alarme = false;
-    // Rearmar NAO abre a valvula.
     return true;
   }
 

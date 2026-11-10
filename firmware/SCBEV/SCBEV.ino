@@ -9,8 +9,8 @@
 #include "Seguranca.h"
 
 const char *NOME_WIFI = "SEU_WIFI", *SENHA_WIFI = "SUA_SENHA";
-const int SENSOR = 34, RELE = 19; // Rele RoboCore: HIGH liga, LOW desliga.
-WebServer servidor(80);          // HTTP sobre TCP, porta 80.
+const int SENSOR = 34, RELE = 19;
+WebServer servidor(80);
 Seguranca estado;
 portMUX_TYPE trava = portMUX_INITIALIZER_UNLOCKED;
 QueueHandle_t fila;
@@ -37,7 +37,6 @@ void falhaMemoria() {
   Serial.println("ERRO: falha no historico; abertura bloqueada.");
 }
 
-// A tarefa do sensor so coloca registros na fila; o loop escreve na flash.
 void registrar(const char *nivel, const char *texto) {
   Registro r{};
   r.ms = esp_timer_get_time() / 1000;
@@ -77,7 +76,6 @@ void salvarRegistros() {
   if (filaCheia) { filaCheia = false; falhaMemoria(); }
 }
 
-// Executa a cada 50 ms, mesmo enquanto o navegador acessa o historico.
 void lerSensor(void *) {
   TickType_t proxima = xTaskGetTickCount();
   for (;;) {
@@ -118,7 +116,7 @@ String formulario(const char *rota, const char *texto, bool habilitado = true) {
 
 void pagina() {
   Seguranca s = consultar();
-  Seguranca teste = s; // Confere o rearme em uma copia; nao altera o estado real.
+  Seguranca teste = s;
   String p = cabecalho("Monitoramento e controle");
   p += "<section><h2>MONITORAMENTO</h2><strong id='estado' data-live class='" + String(s.molhado ? "erro" : s.alarme || !s.secoConfirmado ? "aviso" : "ok") + "'>";
   p += String(s.molhado ? "Vazamento detectado" : s.alarme ? "Alarme aguardando rearme" : s.secoConfirmado ? "Sensor seco" : "Confirmando leitura") + "</strong>";
@@ -133,7 +131,6 @@ void pagina() {
   p += "<form method='post' action='/hora' onsubmit=\"this.epoch.value=Math.floor(Date.now()/1000)\"><input type='hidden' name='epoch'><input type='hidden' name='token' value='" + token + "'><button>Acertar hora pelo celular/PC</button></form>";
   p += R"HTML(<p><a href='/historico'>Consultar histórico de eventos</a></p></section></main>
 <script>
-// Busca os dados sem recarregar a pagina nem substituir os controles.
 async function atualizar() {
   try {
     const r=await fetch('/',{cache:'no-store',signal:AbortSignal.timeout(4000)});
@@ -231,7 +228,6 @@ void setup() {
   token = String(esp_random(), HEX) + String(esp_random(), HEX);
   boot = String(esp_random(), HEX);
   fila = xQueueCreate(16, sizeof(Registro));
-  // Nao formata uma memoria que ja foi inicializada pela versao anterior.
   Preferences config;
   bool nvs = config.begin("scbev", false), pronta = nvs && config.getBool("fs_pronto", false);
   memoriaOk = LittleFS.begin(false);
@@ -265,7 +261,7 @@ void loop() {
   if (!horaRegistrada && time(nullptr) >= 1704067200) {
     horaRegistrada = true;
     String base = "BASE_HORA=" + String((long long)(int64_t(time(nullptr)) * 1000 - esp_timer_get_time() / 1000));
-    registrar("INFOS", base.c_str()); // Permite datar os eventos iniciais SEM_HORA do mesmo boot.
+    registrar("INFOS", base.c_str());
   }
   salvarRegistros();
   if (servidorAtivo) servidor.handleClient();
