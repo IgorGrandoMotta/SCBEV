@@ -24,12 +24,16 @@ firmware.
 - `firmware/SCBEV/Seguranca.h`: condições de bloqueio,
   abertura e rearme.
 
-O HTML, o CSS e o JavaScript estão no próprio `.ino`. A interface apresenta
-leitura, alarme, comando da válvula, IP, MAC, horário e acesso ao histórico.
-O navegador consulta a página em segundo plano e copia somente campos,
-condições dos botões e tokens, sem recarregar a tela. Não há gráfico nem CSV.
-Em falha de comunicação, mostra que os dados são anteriores e desabilita os
-botões de abertura e rearme até receber nova resposta.
+O HTML, o CSS e o JavaScript estão no próprio `.ino`. O painel mostra estado
+do sensor, alarme, comando da válvula, gráfico das últimas 60 leituras da página,
+IP, MAC, sinal do Wi-Fi, horário e tempo ligado. Os dados são consultados em
+`/estado` a cada 2 segundos, sem recarga da página. O gráfico começa vazio ao
+abrir ou recarregar o painel; não representa medições anteriores à sessão.
+
+O histórico persistente aparece em tabela com os 80 eventos mais recentes,
+atualização periódica e exportação dos registros disponíveis em CSV. Os comandos
+são enviados pelo painel sem navegação para outra página. Em falha de comunicação,
+o painel indica dados anteriores e desabilita abertura e rearme.
 
 ## Montagem
 
@@ -99,6 +103,7 @@ O ADC fornece uma leitura bruta, não porcentagem de umidade.
 | Método | Rota | Função |
 | --- | --- | --- |
 | GET | `/` | Página principal |
+| GET | `/estado` | Estado atual em JSON |
 | POST | `/abrir` | Solicitar abertura |
 | POST | `/fechar` | Solicitar fechamento |
 | POST | `/rearmar` | Liberar alarme quando permitido, mantendo fechamento |

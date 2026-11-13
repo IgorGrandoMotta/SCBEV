@@ -94,67 +94,109 @@ void lerSensor(void *) {
 }
 
 String cabecalho(const char *titulo) {
-  String p = "<!doctype html><html lang='pt-BR'><head><meta charset='utf-8'><meta name='viewport' content='width=device-width,initial-scale=1'><title>SCBEV</title>";
-  p += R"HTML(<style>
-*{box-sizing:border-box}body{margin:0;background:#10171d;color:#e8eef2;font:16px/1.6 system-ui,sans-serif}
-header{background:#102e3d;border-bottom:1px solid #344956;padding:24px}header div,main{max-width:980px;margin:auto}
-h1{margin:0;font-size:26px;letter-spacing:3px}h2{margin:0 0 16px;font-size:14px;color:#b7cbd5;letter-spacing:1px}p{margin:10px 0}
-main{padding:24px;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px}section{padding:24px;background:#19232c;border:1px solid #344956;border-radius:12px}
-strong{display:block;font-size:23px;line-height:1.4;margin-bottom:12px}.ok{color:#80dfbf}.aviso{color:#f1c16a}.erro{color:#ff9292}
-small{display:block;color:#b7cbd5;font-size:13px}a{color:#9addf4}form{display:inline-block;margin:4px 4px 4px 0}
-button{font:inherit;font-size:14px;cursor:pointer;color:#f0f6fa;background:#25495b;border:1px solid #68899a;border-radius:7px;padding:10px 14px}
-button:hover:not(:disabled){background:#32627a}button:disabled{opacity:.45;cursor:default}a:focus-visible,button:focus-visible{outline:3px solid #f1c16a;outline-offset:3px}
-pre{white-space:pre-wrap;overflow-wrap:anywhere;font:13px/1.7 monospace}.largo{grid-column:1/-1}.dato{overflow-wrap:anywhere}
-@media(max-width:640px){main{grid-template-columns:1fr;padding:16px;gap:16px}section{padding:20px}strong{font-size:21px}}
-</style></head><body><header><div><h1>SCBEV</h1><small>Sistema Ciberfísico de Bloqueio Emergencial de Vazamentos</small></div></header><main>)HTML";
-  return p + "<section class='largo'><h2>" + titulo + "</h2><small>ESP32 · Rede local · HTTP / TCP 80</small></section>";
+  String p = R"HTML(<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>SCBEV</title><style>
+*{box-sizing:border-box}body{margin:0;background:#0b141b;color:#e3ecef;font:15px/1.6 system-ui,sans-serif}header{background:#102c39;border-bottom:1px solid #24404b;padding:30px 24px}header>div{max-width:1140px;margin:auto;display:flex;align-items:center;justify-content:space-between;gap:24px}h1{font-size:26px;letter-spacing:4px;margin:0}header small{color:#b0c5ce}.badge{border:1px solid #43616d;border-radius:30px;padding:7px 15px;font-size:11px;white-space:nowrap}main{max-width:1188px;margin:auto;padding:28px 24px;display:grid;grid-template-columns:1.25fr 1fr;gap:22px}.page-title{grid-column:1/-1;color:#8fa9b5;font-size:13px;letter-spacing:1px}section{min-width:0;background:#121f27;border:1px solid #2c414c;border-radius:18px;padding:26px}h2{margin:0 0 16px;font-size:11px;font-weight:650;letter-spacing:2px;text-transform:uppercase;color:#9eb4bf}strong{display:block;font-size:27px;line-height:1.3;margin:12px 0}p{margin:12px 0}small{display:block;font-size:12px;color:#9fb2bd}.ok{color:#7ae0c4}.aviso{color:#f0c778}.erro{color:#f0787e}.monitor.ok{border-color:#39bfa4}.monitor.aviso{border-color:#ae8439}.monitor.erro{border-color:#c95461}.actions{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin-top:18px}form{display:inline-block;margin:0}button,.button{display:inline-block;font:inherit;font-size:13px;text-decoration:none;border:1px solid #45606d;color:#e2eef3;background:#1c3542;border-radius:9px;padding:10px 13px;cursor:pointer}button:hover:not(:disabled),.button:hover{background:#284c5c}button:disabled{opacity:.4;cursor:default}.primary{background:#064c43;border-color:#21b699}.primary:hover:not(:disabled){background:#086556}button:focus-visible,a:focus-visible{outline:3px solid #f0c778;outline-offset:3px}a{color:#8edbd0}.section-head{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;align-items:center}.section-head .actions{margin:0}.reading{display:flex;gap:12px;align-items:baseline;margin:12px 0}.reading b{font-size:42px;line-height:1.2}.reading span{color:#8fa9b5;font-size:13px}canvas{display:block;width:100%;height:220px}.legend{display:flex;flex-wrap:wrap;gap:16px;font-size:11px;color:#a5bbc5;margin:10px 0}.legend i{display:inline-block;width:14px;height:2px;background:#62ddbf;vertical-align:middle;margin-right:5px}.legend .water{background:#f0787e}.legend .dry{background:#f0c778}dl{display:grid;grid-template-columns:1fr 1fr;gap:20px 18px;margin:22px 0}dt{font-size:10px;text-transform:uppercase;letter-spacing:1px;color:#8fa9b5}dd{margin:5px 0 0;font-size:13px;overflow-wrap:anywhere}.largo{grid-column:1/-1}.table-wrap{max-height:340px;overflow:auto;margin:16px 0}table{width:100%;border-collapse:collapse;font-size:12px;text-align:left}th{position:sticky;top:0;background:#152630;color:#a9bec8;font-weight:500}th,td{padding:12px 10px;border-bottom:1px solid #2c3d47;vertical-align:top}td:first-child{white-space:nowrap;width:190px}.nivel{font-size:10px;letter-spacing:.5px;font-weight:650}td:last-child{overflow-wrap:anywhere}pre{font:12px/1.8 monospace;white-space:pre-wrap;overflow-wrap:anywhere}#resultado{font-size:12px;color:#b5c9d3;min-height:20px}@media(max-width:720px){main{grid-template-columns:1fr;padding:18px 14px;gap:16px}header{padding:22px 16px}header>div{align-items:flex-start}.badge{display:none}section{padding:22px 18px;border-radius:14px}strong{font-size:23px}h1{font-size:23px}.section-head{display:block}.section-head .actions{margin-top:12px}dl{gap:18px 12px}td:first-child{white-space:normal;min-width:110px}.table-wrap{overflow:auto}table{min-width:540px}}
+</style></head><body><header><div><div><h1>SCBEV</h1><small>Sistema Ciberfísico de Bloqueio Emergencial de Vazamentos</small></div><span class="badge">ESP32 · HTTP / TCP 80</span></div></header><main>)HTML";
+  return p + "<div class='page-title'>" + titulo + "</div>";
 }
 
-String formulario(const char *rota, const char *texto, bool habilitado = true) {
-  return "<form method='post' action='" + String(rota) + "'><input type='hidden' name='token' value='" + token + "'><button" + (habilitado ? String("") : String(" disabled")) + ">" + texto + "</button></form>";
+void dados() {
+  Seguranca s = consultar(), teste = s;
+  String j = "{\"leitura\":" + String(s.leitura);
+  j += ",\"molhado\":" + String(s.molhado ? "true" : "false");
+  j += ",\"alarme\":" + String(s.alarme ? "true" : "false");
+  j += ",\"seco\":" + String(s.secoConfirmado ? "true" : "false");
+  j += ",\"aberta\":" + String(s.aberta ? "true" : "false");
+  j += ",\"wifi\":" + String(s.conectado ? "true" : "false");
+  j += ",\"memoria\":" + String(s.memoriaOk ? "true" : "false");
+  j += ",\"abrir\":" + String(s.podeAbrir(millis()) ? "true" : "false");
+  j += ",\"rearmar\":" + String(s.alarme && teste.rearmar(millis()) ? "true" : "false");
+  j += ",\"sinal\":" + String(WiFi.RSSI());
+  j += ",\"tempo\":" + String((unsigned long long)(esp_timer_get_time() / 1000000));
+  j += ",\"uso\":" + String(memoriaOk ? LittleFS.usedBytes() : 0);
+  j += ",\"ip\":\"" + WiFi.localIP().toString() + "\",\"mac\":\"" + WiFi.macAddress();
+  j += "\",\"hora\":\"" + dataHora(time(nullptr)) + "\",\"token\":\"" + token + "\"}";
+  servidor.sendHeader("Cache-Control", "no-store");
+  servidor.send(200, "application/json; charset=utf-8", j);
 }
 
 void pagina() {
-  Seguranca s = consultar();
-  Seguranca teste = s;
-  String p = cabecalho("Monitoramento e controle");
-  p += "<section><h2>MONITORAMENTO</h2><strong id='estado' data-live class='" + String(s.molhado ? "erro" : s.alarme || !s.secoConfirmado ? "aviso" : "ok") + "'>";
-  p += String(s.molhado ? "Vazamento detectado" : s.alarme ? "Alarme aguardando rearme" : s.secoConfirmado ? "Sensor seco" : "Confirmando leitura") + "</strong>";
-  p += "<p>Leitura do sensor: <b id='leitura' data-live>" + String(s.leitura) + " / 4095</b></p><small>Água: abaixo de 4000. Seco: acima de 4050 por 2 s.</small>";
-  p += "<p>Alarme: <span id='alarme' data-live>" + String(s.alarme ? "retido; seque o sensor e rearme" : "livre") + "</span></p></section>";
-  p += "<section><h2>COMANDO DA VÁLVULA</h2><strong id='valvula' data-live>" + String(s.aberta ? "ABERTURA SOLICITADA" : "FECHAMENTO SOLICITADO") + "</strong>";
-  p += formulario("/abrir", "Abrir válvula", s.podeAbrir(millis())) + formulario("/fechar", "Fechar válvula") + formulario("/rearmar", "Rearmar alarme", s.alarme && teste.rearmar(millis()));
-  p += "<p><small>Após secar por 2 s, rearme e abra manualmente. A posição física não é medida. A bomba tem alimentação separada.</small></p></section>";
-  p += "<section class='dato'><h2>REDE E DISPOSITIVO</h2><p>Wi-Fi: <span id='wifi' data-live>" + String(s.conectado ? "conectado" : "desconectado") + "</span></p>";
-  p += "<p>IP: " + WiFi.localIP().toString() + "<br>MAC: " + WiFi.macAddress() + "</p><small id='atualizacao' role='status'>Atualização dos dados a cada 2 s.</small></section>";
-  p += "<section><h2>HISTÓRICO E HORÁRIO</h2><p>Hora: <span id='hora' data-live>" + dataHora(time(nullptr)) + "</span></p><p>Memória: <span id='memoria' data-live>" + (s.memoriaOk ? "disponível" : "FALHA; abertura bloqueada") + "</span></p>";
-  p += "<form method='post' action='/hora' onsubmit=\"this.epoch.value=Math.floor(Date.now()/1000)\"><input type='hidden' name='epoch'><input type='hidden' name='token' value='" + token + "'><button>Acertar hora pelo celular/PC</button></form>";
-  p += R"HTML(<p><a href='/historico'>Consultar histórico de eventos</a></p></section></main>
-<script>
-async function atualizar() {
-  try {
-    const r=await fetch('/',{cache:'no-store',signal:AbortSignal.timeout(4000)});
-    if(!r.ok) throw Error('Sem resposta');
-    const nova=new DOMParser().parseFromString(await r.text(),'text/html');
-    const campos=[...document.querySelectorAll('[data-live]')];
-    if(campos.some(e=>!nova.getElementById(e.id))) throw Error('Resposta invalida');
-    campos.forEach(e=>{const n=nova.getElementById(e.id);e.textContent=n.textContent;e.className=n.className;});
-    document.querySelectorAll('form').forEach(f=>{f.querySelector('button').disabled=nova.querySelector('form[action="'+f.getAttribute('action')+'"] button').disabled;});
-    document.querySelectorAll('input[name="token"]').forEach(e=>e.value=nova.querySelector('input[name="token"]').value);
-    document.getElementById('atualizacao').textContent='Dados atualizados a cada 2 s, sem recarregar a página.';
-  } catch(e) {
-    document.getElementById('atualizacao').textContent='Sem resposta do ESP32. Dados anteriores; tentando novamente.';
-    document.querySelectorAll('form[action="/abrir"] button,form[action="/rearmar"] button').forEach(b=>b.disabled=true);
-  }
-  setTimeout(atualizar,2000);
-}
-setTimeout(atualizar,2000);
-</script></body></html>)HTML";
   servidor.sendHeader("Cache-Control", "no-store");
   servidor.sendHeader("X-Frame-Options", "DENY");
-  servidor.send(200, "text/html; charset=utf-8", p);
+  servidor.send(200, "text/html; charset=utf-8", cabecalho("Painel de monitoramento") + R"HTML(
+<section id="monitor" class="monitor">
+<h2>Monitoramento do ambiente</h2><strong id="estado">Conectando ao ESP32</strong><p id="alarme">Aguardando leitura do sensor.</p><small id="conexao" role="status">Aguardando atualização</small>
+</section>
+<section><h2>Comando da válvula</h2><strong id="valvula">—</strong><small>Comando elétrico do relé · sem sensor de posição</small>
+<div class="actions"><form method="post" action="/abrir"><button id="abrir" class="primary" disabled>Abrir válvula</button></form><form method="post" action="/fechar"><button id="fechar" disabled>Fechar válvula</button></form><form method="post" action="/rearmar"><button id="rearmar" disabled>Rearmar alarme</button></form></div>
+<p id="resultado" role="status" aria-live="polite"></p></section>
+<section><div class="section-head"><h2>Leitura do sensor · GPIO34</h2><small>Últimas 60 leituras desta página</small></div>
+<div class="reading"><b id="leitura">—</b><span>/ 4095</span></div>
+<canvas id="grafico" role="img" aria-label="Gráfico das leituras recentes do sensor, de zero a 4095"></canvas>
+<div class="legend"><span><i></i>Leitura ADC</span><span><i class="water"></i>Água &lt; 4000</span><span><i class="dry"></i>Seco &gt; 4050</span></div>
+<small>Leitura bruta do sensor. Confirmação de seco: 2 segundos.</small></section>
+<section><h2>Rede e dispositivo</h2><dl><div><dt>Endereço IP</dt><dd id="ip">—</dd></div><div><dt>MAC</dt><dd id="mac">—</dd></div><div><dt>Wi-Fi</dt><dd id="wifi">—</dd></div><div><dt>Sinal</dt><dd id="sinal">—</dd></div><div><dt>Data e hora · Brasília</dt><dd id="hora">—</dd></div><div><dt>Tempo ligado</dt><dd id="tempo">—</dd></div><div><dt>Histórico</dt><dd id="memoria">—</dd></div><div><dt>Armazenamento usado</dt><dd id="uso">—</dd></div></dl>
+<form method="post" action="/hora"><button id="acertar" disabled>Sincronizar horário</button></form></section>
+<section class="largo"><div class="section-head"><div><h2>Histórico de eventos</h2><small>Registros armazenados no dispositivo</small></div><div class="actions"><button id="atualizar-log">Atualizar</button><button id="csv" disabled>Baixar CSV</button><a class="button" href="/registros">Registros originais</a></div></div>
+<p id="log-status" role="status">Carregando histórico...</p><div class="table-wrap"><table><thead><tr><th>Data e hora</th><th>Nível</th><th>Ocorrência</th></tr></thead><tbody id="eventos"></tbody></table></div><small>* Horário reconstruído após sincronização do mesmo período de funcionamento.</small></section>
+</main><script>
+const $=id=>document.getElementById(id), amostras=[];
+let token='',ocupado=false,registros=[],carregandoLog=false;
+const texto=(id,valor)=>$(id).textContent=valor;
+function desenhar(){
+  const c=$('grafico'),w=c.clientWidth,h=220,dpr=window.devicePixelRatio||1;
+  c.width=Math.round(w*dpr);c.height=Math.round(h*dpr);
+  const g=c.getContext('2d');g.scale(dpr,dpr);
+  const l=42,r=w-12,t=14,b=h-28,y=v=>b-(b-t)*v/4095;
+  g.font='11px system-ui';g.textAlign='right';
+  [0,2048,4095].forEach(v=>{g.strokeStyle='#2d3a43';g.beginPath();g.moveTo(l,y(v));g.lineTo(r,y(v));g.stroke();g.fillStyle='#99aab4';g.fillText(v,l-8,y(v)+4);});
+  [[4000,'#f0787e'],[4050,'#f0c778']].forEach(([v,cor])=>{g.strokeStyle=cor;g.setLineDash([4,4]);g.beginPath();g.moveTo(l,y(v));g.lineTo(r,y(v));g.stroke();});g.setLineDash([]);
+  if(amostras.length){g.strokeStyle='#62ddbf';g.lineWidth=2;g.beginPath();amostras.forEach((v,i)=>{const x=l+(r-l)*i/Math.max(1,amostras.length-1);i?g.lineTo(x,y(v)):g.moveTo(x,y(v));});g.stroke();if(amostras.length===1){g.beginPath();g.arc(l,y(amostras[0]),3,0,Math.PI*2);g.fillStyle='#62ddbf';g.fill();}}
+  g.fillStyle='#99aab4';g.textAlign='left';g.fillText('mais antiga',l,h-6);g.textAlign='right';g.fillText('agora',r,h-6);
 }
-
+function botoes(s){$('abrir').disabled=ocupado||!s.abrir;$('rearmar').disabled=ocupado||!s.rearmar;$('fechar').disabled=ocupado;$('acertar').disabled=ocupado;}
+async function atualizar(){
+  try{
+    const r=await fetch('/estado',{cache:'no-store',signal:AbortSignal.timeout(4000)});if(!r.ok)throw Error();const s=await r.json();
+    if(!Number.isInteger(s.leitura)||s.leitura<0||s.leitura>4095||typeof s.token!=='string')throw Error();
+    token=s.token;const cor=s.molhado?'erro':s.alarme||!s.seco?'aviso':'ok';$('monitor').className='monitor '+cor;
+    texto('estado',s.molhado?'Vazamento detectado':s.alarme?'Alarme aguardando rearme':s.seco?'Sensor seco':'Confirmando leitura');
+    texto('alarme',s.alarme?'Alarme retido · abertura bloqueada':s.seco?'Alarme livre · abertura por comando manual':'Aguardando estabilização do sensor');
+    texto('conexao','Atualizado às '+new Date().toLocaleTimeString('pt-BR'));texto('valvula',s.aberta?'ABERTURA SOLICITADA':'FECHAMENTO SOLICITADO');
+    texto('leitura',s.leitura);texto('ip',s.ip);texto('mac',s.mac);texto('wifi',s.wifi?'Conectado':'Desconectado');texto('sinal',s.sinal+' dBm');texto('hora',s.hora==='SEM_HORA'?'Não sincronizado':s.hora);
+    texto('tempo',Math.floor(s.tempo/3600)+' h '+Math.floor(s.tempo%3600/60)+' min');texto('memoria',s.memoria?'Disponível':'Falha');texto('uso',Math.ceil(s.uso/1024)+' KiB');
+    amostras.push(s.leitura);if(amostras.length>60)amostras.shift();desenhar();botoes(s);
+  }catch(e){$('monitor').className='monitor aviso';texto('conexao','Sem resposta do ESP32 · dados anteriores');$('abrir').disabled=true;$('rearmar').disabled=true;}
+}
+async function ciclo(){await atualizar();setTimeout(ciclo,2000);}
+document.querySelectorAll('form').forEach(f=>f.addEventListener('submit',async e=>{
+  e.preventDefault();if(ocupado||!token)return;ocupado=true;document.querySelectorAll('form button').forEach(b=>b.disabled=true);
+  const dados=new URLSearchParams({token});if(f.getAttribute('action')==='/hora')dados.set('epoch',Math.floor(Date.now()/1000));
+  try{const r=await fetch(f.getAttribute('action'),{method:'POST',body:dados,signal:AbortSignal.timeout(5000)});texto('resultado',r.ok?'Comando aceito.':r.status===409?'Comando bloqueado pelo estado do sistema.':'Comando recusado.');}
+  catch(e){texto('resultado','Sem confirmação do comando.');}
+  finally{ocupado=false;await atualizar();await carregarHistorico();}
+}));
+function interpretar(texto){
+  const linhas=texto.trim().split('\n').filter(Boolean),bases={};
+  linhas.forEach(l=>{const b=l.match(/BASE_HORA=(\d+).*boot=(\w+)/);if(b)bases[b[2]]=Number(b[1]);});
+  return linhas.map(l=>{const partes=l.split(' | '),b=l.match(/boot=(\w+) ms=(\d+)/);let data=partes[0];
+    if(data==='SEM_HORA'&&b&&bases[b[1]])data=new Date(bases[b[1]]+Number(b[2])).toLocaleString('pt-BR',{timeZone:'America/Sao_Paulo'})+' *';
+    return [data,partes[1]||'INFOS',partes.slice(2).filter(p=>!p.startsWith('boot=')).join(' | ')||l];});
+}
+async function carregarHistorico(){
+  if(carregandoLog)return;carregandoLog=true;$('atualizar-log').disabled=true;
+  try{const r=await fetch('/registros',{cache:'no-store',signal:AbortSignal.timeout(8000)});if(!r.ok)throw Error();registros=interpretar(await r.text());
+    $('eventos').replaceChildren();registros.slice(-80).reverse().forEach(row=>{const tr=document.createElement('tr');row.forEach((v,i)=>{const td=document.createElement('td');td.textContent=v;if(i===1)td.className='nivel '+(v==='ERRO'?'erro':v==='AVISOS'?'aviso':'ok');tr.append(td);});$('eventos').append(tr);});
+    texto('log-status',registros.length?'Exibindo '+Math.min(80,registros.length)+' de '+registros.length+' registros.':'Nenhum evento registrado.');$('csv').disabled=!registros.length;
+  }catch(e){texto('log-status','Histórico indisponível · tente atualizar novamente.');}
+  finally{carregandoLog=false;$('atualizar-log').disabled=false;}
+}
+$('atualizar-log').addEventListener('click',carregarHistorico);
+$('csv').addEventListener('click',()=>{const cell=v=>'"'+String(v).replace(/^[=+@-]/,"'$&").replace(/"/g,'""')+'"';const csv=[['Data e hora','Nível','Ocorrência'],...registros].map(r=>r.map(cell).join(';')).join('\r\n');const url=URL.createObjectURL(new Blob(['\ufeff'+csv],{type:'text/csv;charset=utf-8'}));const a=document.createElement('a');a.href=url;a.download='SCBEV_eventos.csv';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);});
+window.addEventListener('resize',desenhar);desenhar();ciclo();carregarHistorico();setInterval(carregarHistorico,15000);
+</script></body></html>
+)HTML");
+}
 
 void comando() {
   if (servidor.arg("token") != token) { servidor.send(403, "text/plain", "Atualize a pagina."); return; }
@@ -237,6 +279,7 @@ void setup() {
   if (!memoriaOk || !fila) falhaMemoria();
   if (xTaskCreate(lerSensor, "sensor", 4096, nullptr, 2, nullptr) != pdPASS) falhaMemoria();
   servidor.on("/", HTTP_GET, pagina);
+  servidor.on("/estado", HTTP_GET, dados);
   servidor.on("/abrir", HTTP_POST, comando); servidor.on("/fechar", HTTP_POST, comando);
   servidor.on("/rearmar", HTTP_POST, comando); servidor.on("/hora", HTTP_POST, acertarHora);
   servidor.on("/historico", HTTP_GET, historico);
